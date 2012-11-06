@@ -1,0 +1,1460 @@
+Created by PLY version 3.3 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> funcdef
+Rule 2     program -> funcdef program
+Rule 3     funcdef -> DEF NAME ( ) : funcbody
+Rule 4     funcdef -> DEF NAME ( paramlist ) : funcbody
+Rule 5     paramlist -> NAME , paramlist
+Rule 6     paramlist -> NAME
+Rule 7     initlist -> NAME , initlist
+Rule 8     initlist -> NAME
+Rule 9     funcbody -> NEWLINE INDENT funcstatementlist DEDENT
+Rule 10    funcbody -> NEWLINE INDENT [ initlist ] = [ zerolist ] NEWLINE funcstatementlist DEDENT
+Rule 11    funcbody -> NEWLINE INDENT [ ] = [ ] NEWLINE funcstatementlist DEDENT
+Rule 12    zerolist -> ZERO
+Rule 13    zerolist -> ZERO , zerolist
+Rule 14    returnstatement -> RETURN expression NEWLINE
+Rule 15    funcstatementlist -> statementlist returnstatement
+Rule 16    funcstatementlist -> returnstatement
+Rule 17    statementlist -> statement statementlist
+Rule 18    statementlist -> statement
+Rule 19    statement -> simplestatement NEWLINE
+Rule 20    statement -> compoundstatement
+Rule 21    compoundstatement -> IF condition : block
+Rule 22    compoundstatement -> IF condition : block ELSE : block
+Rule 23    compoundstatement -> WHILE condition : block
+Rule 24    compoundstatement -> FOR NAME IN RANGE ( expression , expression ) : block
+Rule 25    simplestatement -> NAME = expression
+Rule 26    block -> NEWLINE INDENT statementlist DEDENT
+Rule 27    expression -> ( expression + expression )
+Rule 28    expression -> ( expression - expression )
+Rule 29    expression -> NUMBER
+Rule 30    expression -> ZERO
+Rule 31    expression -> - ZERO
+Rule 32    expression -> - NUMBER
+Rule 33    expression -> NAME ( arglist )
+Rule 34    expression -> NAME ( )
+Rule 35    expression -> NAME
+Rule 36    arglist -> expression
+Rule 37    arglist -> expression , arglist
+Rule 38    condition -> ( condition AND condition )
+Rule 39    condition -> ( condition OR condition )
+Rule 40    condition -> ( expression BOOLOP expression )
+Rule 41    condition -> ( NOT condition )
+
+Terminals, with rules where they appear
+
+(                    : 3 4 24 27 28 33 34 38 39 40 41
+)                    : 3 4 24 27 28 33 34 38 39 40 41
++                    : 27
+,                    : 5 7 13 24 37
+-                    : 28 31 32
+:                    : 3 4 21 22 22 23 24
+=                    : 10 11 25
+AND                  : 38
+BOOLOP               : 40
+DEDENT               : 9 10 11 26
+DEF                  : 3 4
+ELSE                 : 22
+FOR                  : 24
+IF                   : 21 22
+IN                   : 24
+INDENT               : 9 10 11 26
+NAME                 : 3 4 5 6 7 8 24 25 33 34 35
+NEWLINE              : 9 10 10 11 11 14 19 26
+NOT                  : 41
+NUMBER               : 29 32
+OR                   : 39
+RANGE                : 24
+RETURN               : 14
+WHILE                : 23
+ZERO                 : 12 13 30 31
+[                    : 10 10 11 11
+]                    : 10 10 11 11
+error                : 
+
+Nonterminals, with rules where they appear
+
+arglist              : 33 37
+block                : 21 22 22 23 24
+compoundstatement    : 20
+condition            : 21 22 23 38 38 39 39 41
+expression           : 14 24 24 25 27 27 28 28 36 37 40 40
+funcbody             : 3 4
+funcdef              : 1 2
+funcstatementlist    : 9 10 11
+initlist             : 7 10
+paramlist            : 4 5
+program              : 2 0
+returnstatement      : 15 16
+simplestatement      : 19
+statement            : 17 18
+statementlist        : 15 17 26
+zerolist             : 10 13
+
+Parsing method: SLR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . funcdef
+    (2) program -> . funcdef program
+    (3) funcdef -> . DEF NAME ( ) : funcbody
+    (4) funcdef -> . DEF NAME ( paramlist ) : funcbody
+
+    DEF             shift and go to state 3
+
+    funcdef                        shift and go to state 2
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> funcdef .
+    (2) program -> funcdef . program
+    (1) program -> . funcdef
+    (2) program -> . funcdef program
+    (3) funcdef -> . DEF NAME ( ) : funcbody
+    (4) funcdef -> . DEF NAME ( paramlist ) : funcbody
+
+    $end            reduce using rule 1 (program -> funcdef .)
+    DEF             shift and go to state 3
+
+    funcdef                        shift and go to state 2
+    program                        shift and go to state 4
+
+state 3
+
+    (3) funcdef -> DEF . NAME ( ) : funcbody
+    (4) funcdef -> DEF . NAME ( paramlist ) : funcbody
+
+    NAME            shift and go to state 5
+
+
+state 4
+
+    (2) program -> funcdef program .
+
+    $end            reduce using rule 2 (program -> funcdef program .)
+
+
+state 5
+
+    (3) funcdef -> DEF NAME . ( ) : funcbody
+    (4) funcdef -> DEF NAME . ( paramlist ) : funcbody
+
+    (               shift and go to state 6
+
+
+state 6
+
+    (3) funcdef -> DEF NAME ( . ) : funcbody
+    (4) funcdef -> DEF NAME ( . paramlist ) : funcbody
+    (5) paramlist -> . NAME , paramlist
+    (6) paramlist -> . NAME
+
+    )               shift and go to state 8
+    NAME            shift and go to state 7
+
+    paramlist                      shift and go to state 9
+
+state 7
+
+    (5) paramlist -> NAME . , paramlist
+    (6) paramlist -> NAME .
+
+    ,               shift and go to state 10
+    )               reduce using rule 6 (paramlist -> NAME .)
+
+
+state 8
+
+    (3) funcdef -> DEF NAME ( ) . : funcbody
+
+    :               shift and go to state 11
+
+
+state 9
+
+    (4) funcdef -> DEF NAME ( paramlist . ) : funcbody
+
+    )               shift and go to state 12
+
+
+state 10
+
+    (5) paramlist -> NAME , . paramlist
+    (5) paramlist -> . NAME , paramlist
+    (6) paramlist -> . NAME
+
+    NAME            shift and go to state 7
+
+    paramlist                      shift and go to state 13
+
+state 11
+
+    (3) funcdef -> DEF NAME ( ) : . funcbody
+    (9) funcbody -> . NEWLINE INDENT funcstatementlist DEDENT
+    (10) funcbody -> . NEWLINE INDENT [ initlist ] = [ zerolist ] NEWLINE funcstatementlist DEDENT
+    (11) funcbody -> . NEWLINE INDENT [ ] = [ ] NEWLINE funcstatementlist DEDENT
+
+    NEWLINE         shift and go to state 15
+
+    funcbody                       shift and go to state 14
+
+state 12
+
+    (4) funcdef -> DEF NAME ( paramlist ) . : funcbody
+
+    :               shift and go to state 16
+
+
+state 13
+
+    (5) paramlist -> NAME , paramlist .
+
+    )               reduce using rule 5 (paramlist -> NAME , paramlist .)
+
+
+state 14
+
+    (3) funcdef -> DEF NAME ( ) : funcbody .
+
+    $end            reduce using rule 3 (funcdef -> DEF NAME ( ) : funcbody .)
+    DEF             reduce using rule 3 (funcdef -> DEF NAME ( ) : funcbody .)
+
+
+state 15
+
+    (9) funcbody -> NEWLINE . INDENT funcstatementlist DEDENT
+    (10) funcbody -> NEWLINE . INDENT [ initlist ] = [ zerolist ] NEWLINE funcstatementlist DEDENT
+    (11) funcbody -> NEWLINE . INDENT [ ] = [ ] NEWLINE funcstatementlist DEDENT
+
+    INDENT          shift and go to state 17
+
+
+state 16
+
+    (4) funcdef -> DEF NAME ( paramlist ) : . funcbody
+    (9) funcbody -> . NEWLINE INDENT funcstatementlist DEDENT
+    (10) funcbody -> . NEWLINE INDENT [ initlist ] = [ zerolist ] NEWLINE funcstatementlist DEDENT
+    (11) funcbody -> . NEWLINE INDENT [ ] = [ ] NEWLINE funcstatementlist DEDENT
+
+    NEWLINE         shift and go to state 15
+
+    funcbody                       shift and go to state 18
+
+state 17
+
+    (9) funcbody -> NEWLINE INDENT . funcstatementlist DEDENT
+    (10) funcbody -> NEWLINE INDENT . [ initlist ] = [ zerolist ] NEWLINE funcstatementlist DEDENT
+    (11) funcbody -> NEWLINE INDENT . [ ] = [ ] NEWLINE funcstatementlist DEDENT
+    (15) funcstatementlist -> . statementlist returnstatement
+    (16) funcstatementlist -> . returnstatement
+    (17) statementlist -> . statement statementlist
+    (18) statementlist -> . statement
+    (14) returnstatement -> . RETURN expression NEWLINE
+    (19) statement -> . simplestatement NEWLINE
+    (20) statement -> . compoundstatement
+    (25) simplestatement -> . NAME = expression
+    (21) compoundstatement -> . IF condition : block
+    (22) compoundstatement -> . IF condition : block ELSE : block
+    (23) compoundstatement -> . WHILE condition : block
+    (24) compoundstatement -> . FOR NAME IN RANGE ( expression , expression ) : block
+
+    [               shift and go to state 27
+    RETURN          shift and go to state 19
+    NAME            shift and go to state 29
+    IF              shift and go to state 28
+    WHILE           shift and go to state 21
+    FOR             shift and go to state 25
+
+    compoundstatement              shift and go to state 23
+    statementlist                  shift and go to state 20
+    simplestatement                shift and go to state 26
+    statement                      shift and go to state 24
+    returnstatement                shift and go to state 30
+    funcstatementlist              shift and go to state 22
+
+state 18
+
+    (4) funcdef -> DEF NAME ( paramlist ) : funcbody .
+
+    $end            reduce using rule 4 (funcdef -> DEF NAME ( paramlist ) : funcbody .)
+    DEF             reduce using rule 4 (funcdef -> DEF NAME ( paramlist ) : funcbody .)
+
+
+state 19
+
+    (14) returnstatement -> RETURN . expression NEWLINE
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    (               shift and go to state 32
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    expression                     shift and go to state 36
+
+state 20
+
+    (15) funcstatementlist -> statementlist . returnstatement
+    (14) returnstatement -> . RETURN expression NEWLINE
+
+    RETURN          shift and go to state 19
+
+    returnstatement                shift and go to state 37
+
+state 21
+
+    (23) compoundstatement -> WHILE . condition : block
+    (38) condition -> . ( condition AND condition )
+    (39) condition -> . ( condition OR condition )
+    (40) condition -> . ( expression BOOLOP expression )
+    (41) condition -> . ( NOT condition )
+
+    (               shift and go to state 38
+
+    condition                      shift and go to state 39
+
+state 22
+
+    (9) funcbody -> NEWLINE INDENT funcstatementlist . DEDENT
+
+    DEDENT          shift and go to state 40
+
+
+state 23
+
+    (20) statement -> compoundstatement .
+
+    NAME            reduce using rule 20 (statement -> compoundstatement .)
+    IF              reduce using rule 20 (statement -> compoundstatement .)
+    WHILE           reduce using rule 20 (statement -> compoundstatement .)
+    FOR             reduce using rule 20 (statement -> compoundstatement .)
+    RETURN          reduce using rule 20 (statement -> compoundstatement .)
+    DEDENT          reduce using rule 20 (statement -> compoundstatement .)
+
+
+state 24
+
+    (17) statementlist -> statement . statementlist
+    (18) statementlist -> statement .
+    (17) statementlist -> . statement statementlist
+    (18) statementlist -> . statement
+    (19) statement -> . simplestatement NEWLINE
+    (20) statement -> . compoundstatement
+    (25) simplestatement -> . NAME = expression
+    (21) compoundstatement -> . IF condition : block
+    (22) compoundstatement -> . IF condition : block ELSE : block
+    (23) compoundstatement -> . WHILE condition : block
+    (24) compoundstatement -> . FOR NAME IN RANGE ( expression , expression ) : block
+
+    RETURN          reduce using rule 18 (statementlist -> statement .)
+    DEDENT          reduce using rule 18 (statementlist -> statement .)
+    NAME            shift and go to state 29
+    IF              shift and go to state 28
+    WHILE           shift and go to state 21
+    FOR             shift and go to state 25
+
+    compoundstatement              shift and go to state 23
+    simplestatement                shift and go to state 26
+    statementlist                  shift and go to state 41
+    statement                      shift and go to state 24
+
+state 25
+
+    (24) compoundstatement -> FOR . NAME IN RANGE ( expression , expression ) : block
+
+    NAME            shift and go to state 42
+
+
+state 26
+
+    (19) statement -> simplestatement . NEWLINE
+
+    NEWLINE         shift and go to state 43
+
+
+state 27
+
+    (10) funcbody -> NEWLINE INDENT [ . initlist ] = [ zerolist ] NEWLINE funcstatementlist DEDENT
+    (11) funcbody -> NEWLINE INDENT [ . ] = [ ] NEWLINE funcstatementlist DEDENT
+    (7) initlist -> . NAME , initlist
+    (8) initlist -> . NAME
+
+    ]               shift and go to state 46
+    NAME            shift and go to state 44
+
+    initlist                       shift and go to state 45
+
+state 28
+
+    (21) compoundstatement -> IF . condition : block
+    (22) compoundstatement -> IF . condition : block ELSE : block
+    (38) condition -> . ( condition AND condition )
+    (39) condition -> . ( condition OR condition )
+    (40) condition -> . ( expression BOOLOP expression )
+    (41) condition -> . ( NOT condition )
+
+    (               shift and go to state 38
+
+    condition                      shift and go to state 47
+
+state 29
+
+    (25) simplestatement -> NAME . = expression
+
+    =               shift and go to state 48
+
+
+state 30
+
+    (16) funcstatementlist -> returnstatement .
+
+    DEDENT          reduce using rule 16 (funcstatementlist -> returnstatement .)
+
+
+state 31
+
+    (33) expression -> NAME . ( arglist )
+    (34) expression -> NAME . ( )
+    (35) expression -> NAME .
+
+    (               shift and go to state 49
+    NEWLINE         reduce using rule 35 (expression -> NAME .)
+    ,               reduce using rule 35 (expression -> NAME .)
+    )               reduce using rule 35 (expression -> NAME .)
+    +               reduce using rule 35 (expression -> NAME .)
+    -               reduce using rule 35 (expression -> NAME .)
+    BOOLOP          reduce using rule 35 (expression -> NAME .)
+
+
+state 32
+
+    (27) expression -> ( . expression + expression )
+    (28) expression -> ( . expression - expression )
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    (               shift and go to state 32
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    expression                     shift and go to state 50
+
+state 33
+
+    (31) expression -> - . ZERO
+    (32) expression -> - . NUMBER
+
+    ZERO            shift and go to state 51
+    NUMBER          shift and go to state 52
+
+
+state 34
+
+    (29) expression -> NUMBER .
+
+    NEWLINE         reduce using rule 29 (expression -> NUMBER .)
+    ,               reduce using rule 29 (expression -> NUMBER .)
+    )               reduce using rule 29 (expression -> NUMBER .)
+    +               reduce using rule 29 (expression -> NUMBER .)
+    -               reduce using rule 29 (expression -> NUMBER .)
+    BOOLOP          reduce using rule 29 (expression -> NUMBER .)
+
+
+state 35
+
+    (30) expression -> ZERO .
+
+    NEWLINE         reduce using rule 30 (expression -> ZERO .)
+    ,               reduce using rule 30 (expression -> ZERO .)
+    )               reduce using rule 30 (expression -> ZERO .)
+    +               reduce using rule 30 (expression -> ZERO .)
+    -               reduce using rule 30 (expression -> ZERO .)
+    BOOLOP          reduce using rule 30 (expression -> ZERO .)
+
+
+state 36
+
+    (14) returnstatement -> RETURN expression . NEWLINE
+
+    NEWLINE         shift and go to state 53
+
+
+state 37
+
+    (15) funcstatementlist -> statementlist returnstatement .
+
+    DEDENT          reduce using rule 15 (funcstatementlist -> statementlist returnstatement .)
+
+
+state 38
+
+    (38) condition -> ( . condition AND condition )
+    (39) condition -> ( . condition OR condition )
+    (40) condition -> ( . expression BOOLOP expression )
+    (41) condition -> ( . NOT condition )
+    (38) condition -> . ( condition AND condition )
+    (39) condition -> . ( condition OR condition )
+    (40) condition -> . ( expression BOOLOP expression )
+    (41) condition -> . ( NOT condition )
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    NOT             shift and go to state 55
+    (               shift and go to state 54
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    expression                     shift and go to state 56
+    condition                      shift and go to state 57
+
+state 39
+
+    (23) compoundstatement -> WHILE condition . : block
+
+    :               shift and go to state 58
+
+
+state 40
+
+    (9) funcbody -> NEWLINE INDENT funcstatementlist DEDENT .
+
+    $end            reduce using rule 9 (funcbody -> NEWLINE INDENT funcstatementlist DEDENT .)
+    DEF             reduce using rule 9 (funcbody -> NEWLINE INDENT funcstatementlist DEDENT .)
+
+
+state 41
+
+    (17) statementlist -> statement statementlist .
+
+    RETURN          reduce using rule 17 (statementlist -> statement statementlist .)
+    DEDENT          reduce using rule 17 (statementlist -> statement statementlist .)
+
+
+state 42
+
+    (24) compoundstatement -> FOR NAME . IN RANGE ( expression , expression ) : block
+
+    IN              shift and go to state 59
+
+
+state 43
+
+    (19) statement -> simplestatement NEWLINE .
+
+    NAME            reduce using rule 19 (statement -> simplestatement NEWLINE .)
+    IF              reduce using rule 19 (statement -> simplestatement NEWLINE .)
+    WHILE           reduce using rule 19 (statement -> simplestatement NEWLINE .)
+    FOR             reduce using rule 19 (statement -> simplestatement NEWLINE .)
+    RETURN          reduce using rule 19 (statement -> simplestatement NEWLINE .)
+    DEDENT          reduce using rule 19 (statement -> simplestatement NEWLINE .)
+
+
+state 44
+
+    (7) initlist -> NAME . , initlist
+    (8) initlist -> NAME .
+
+    ,               shift and go to state 60
+    ]               reduce using rule 8 (initlist -> NAME .)
+
+
+state 45
+
+    (10) funcbody -> NEWLINE INDENT [ initlist . ] = [ zerolist ] NEWLINE funcstatementlist DEDENT
+
+    ]               shift and go to state 61
+
+
+state 46
+
+    (11) funcbody -> NEWLINE INDENT [ ] . = [ ] NEWLINE funcstatementlist DEDENT
+
+    =               shift and go to state 62
+
+
+state 47
+
+    (21) compoundstatement -> IF condition . : block
+    (22) compoundstatement -> IF condition . : block ELSE : block
+
+    :               shift and go to state 63
+
+
+state 48
+
+    (25) simplestatement -> NAME = . expression
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    (               shift and go to state 32
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    expression                     shift and go to state 64
+
+state 49
+
+    (33) expression -> NAME ( . arglist )
+    (34) expression -> NAME ( . )
+    (36) arglist -> . expression
+    (37) arglist -> . expression , arglist
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    )               shift and go to state 65
+    (               shift and go to state 32
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    arglist                        shift and go to state 66
+    expression                     shift and go to state 67
+
+state 50
+
+    (27) expression -> ( expression . + expression )
+    (28) expression -> ( expression . - expression )
+
+    +               shift and go to state 68
+    -               shift and go to state 69
+
+
+state 51
+
+    (31) expression -> - ZERO .
+
+    NEWLINE         reduce using rule 31 (expression -> - ZERO .)
+    ,               reduce using rule 31 (expression -> - ZERO .)
+    )               reduce using rule 31 (expression -> - ZERO .)
+    +               reduce using rule 31 (expression -> - ZERO .)
+    -               reduce using rule 31 (expression -> - ZERO .)
+    BOOLOP          reduce using rule 31 (expression -> - ZERO .)
+
+
+state 52
+
+    (32) expression -> - NUMBER .
+
+    NEWLINE         reduce using rule 32 (expression -> - NUMBER .)
+    ,               reduce using rule 32 (expression -> - NUMBER .)
+    )               reduce using rule 32 (expression -> - NUMBER .)
+    +               reduce using rule 32 (expression -> - NUMBER .)
+    -               reduce using rule 32 (expression -> - NUMBER .)
+    BOOLOP          reduce using rule 32 (expression -> - NUMBER .)
+
+
+state 53
+
+    (14) returnstatement -> RETURN expression NEWLINE .
+
+    DEDENT          reduce using rule 14 (returnstatement -> RETURN expression NEWLINE .)
+
+
+state 54
+
+    (38) condition -> ( . condition AND condition )
+    (39) condition -> ( . condition OR condition )
+    (40) condition -> ( . expression BOOLOP expression )
+    (41) condition -> ( . NOT condition )
+    (27) expression -> ( . expression + expression )
+    (28) expression -> ( . expression - expression )
+    (38) condition -> . ( condition AND condition )
+    (39) condition -> . ( condition OR condition )
+    (40) condition -> . ( expression BOOLOP expression )
+    (41) condition -> . ( NOT condition )
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    NOT             shift and go to state 55
+    (               shift and go to state 54
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    expression                     shift and go to state 70
+    condition                      shift and go to state 57
+
+state 55
+
+    (41) condition -> ( NOT . condition )
+    (38) condition -> . ( condition AND condition )
+    (39) condition -> . ( condition OR condition )
+    (40) condition -> . ( expression BOOLOP expression )
+    (41) condition -> . ( NOT condition )
+
+    (               shift and go to state 38
+
+    condition                      shift and go to state 71
+
+state 56
+
+    (40) condition -> ( expression . BOOLOP expression )
+
+    BOOLOP          shift and go to state 72
+
+
+state 57
+
+    (38) condition -> ( condition . AND condition )
+    (39) condition -> ( condition . OR condition )
+
+    AND             shift and go to state 73
+    OR              shift and go to state 74
+
+
+state 58
+
+    (23) compoundstatement -> WHILE condition : . block
+    (26) block -> . NEWLINE INDENT statementlist DEDENT
+
+    NEWLINE         shift and go to state 75
+
+    block                          shift and go to state 76
+
+state 59
+
+    (24) compoundstatement -> FOR NAME IN . RANGE ( expression , expression ) : block
+
+    RANGE           shift and go to state 77
+
+
+state 60
+
+    (7) initlist -> NAME , . initlist
+    (7) initlist -> . NAME , initlist
+    (8) initlist -> . NAME
+
+    NAME            shift and go to state 44
+
+    initlist                       shift and go to state 78
+
+state 61
+
+    (10) funcbody -> NEWLINE INDENT [ initlist ] . = [ zerolist ] NEWLINE funcstatementlist DEDENT
+
+    =               shift and go to state 79
+
+
+state 62
+
+    (11) funcbody -> NEWLINE INDENT [ ] = . [ ] NEWLINE funcstatementlist DEDENT
+
+    [               shift and go to state 80
+
+
+state 63
+
+    (21) compoundstatement -> IF condition : . block
+    (22) compoundstatement -> IF condition : . block ELSE : block
+    (26) block -> . NEWLINE INDENT statementlist DEDENT
+
+    NEWLINE         shift and go to state 75
+
+    block                          shift and go to state 81
+
+state 64
+
+    (25) simplestatement -> NAME = expression .
+
+    NEWLINE         reduce using rule 25 (simplestatement -> NAME = expression .)
+
+
+state 65
+
+    (34) expression -> NAME ( ) .
+
+    NEWLINE         reduce using rule 34 (expression -> NAME ( ) .)
+    ,               reduce using rule 34 (expression -> NAME ( ) .)
+    )               reduce using rule 34 (expression -> NAME ( ) .)
+    +               reduce using rule 34 (expression -> NAME ( ) .)
+    -               reduce using rule 34 (expression -> NAME ( ) .)
+    BOOLOP          reduce using rule 34 (expression -> NAME ( ) .)
+
+
+state 66
+
+    (33) expression -> NAME ( arglist . )
+
+    )               shift and go to state 82
+
+
+state 67
+
+    (36) arglist -> expression .
+    (37) arglist -> expression . , arglist
+
+    )               reduce using rule 36 (arglist -> expression .)
+    ,               shift and go to state 83
+
+
+state 68
+
+    (27) expression -> ( expression + . expression )
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    (               shift and go to state 32
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    expression                     shift and go to state 84
+
+state 69
+
+    (28) expression -> ( expression - . expression )
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    (               shift and go to state 32
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    expression                     shift and go to state 85
+
+state 70
+
+    (40) condition -> ( expression . BOOLOP expression )
+    (27) expression -> ( expression . + expression )
+    (28) expression -> ( expression . - expression )
+
+    BOOLOP          shift and go to state 72
+    +               shift and go to state 68
+    -               shift and go to state 69
+
+
+state 71
+
+    (41) condition -> ( NOT condition . )
+
+    )               shift and go to state 86
+
+
+state 72
+
+    (40) condition -> ( expression BOOLOP . expression )
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    (               shift and go to state 32
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    expression                     shift and go to state 87
+
+state 73
+
+    (38) condition -> ( condition AND . condition )
+    (38) condition -> . ( condition AND condition )
+    (39) condition -> . ( condition OR condition )
+    (40) condition -> . ( expression BOOLOP expression )
+    (41) condition -> . ( NOT condition )
+
+    (               shift and go to state 38
+
+    condition                      shift and go to state 88
+
+state 74
+
+    (39) condition -> ( condition OR . condition )
+    (38) condition -> . ( condition AND condition )
+    (39) condition -> . ( condition OR condition )
+    (40) condition -> . ( expression BOOLOP expression )
+    (41) condition -> . ( NOT condition )
+
+    (               shift and go to state 38
+
+    condition                      shift and go to state 89
+
+state 75
+
+    (26) block -> NEWLINE . INDENT statementlist DEDENT
+
+    INDENT          shift and go to state 90
+
+
+state 76
+
+    (23) compoundstatement -> WHILE condition : block .
+
+    NAME            reduce using rule 23 (compoundstatement -> WHILE condition : block .)
+    IF              reduce using rule 23 (compoundstatement -> WHILE condition : block .)
+    WHILE           reduce using rule 23 (compoundstatement -> WHILE condition : block .)
+    FOR             reduce using rule 23 (compoundstatement -> WHILE condition : block .)
+    RETURN          reduce using rule 23 (compoundstatement -> WHILE condition : block .)
+    DEDENT          reduce using rule 23 (compoundstatement -> WHILE condition : block .)
+
+
+state 77
+
+    (24) compoundstatement -> FOR NAME IN RANGE . ( expression , expression ) : block
+
+    (               shift and go to state 91
+
+
+state 78
+
+    (7) initlist -> NAME , initlist .
+
+    ]               reduce using rule 7 (initlist -> NAME , initlist .)
+
+
+state 79
+
+    (10) funcbody -> NEWLINE INDENT [ initlist ] = . [ zerolist ] NEWLINE funcstatementlist DEDENT
+
+    [               shift and go to state 92
+
+
+state 80
+
+    (11) funcbody -> NEWLINE INDENT [ ] = [ . ] NEWLINE funcstatementlist DEDENT
+
+    ]               shift and go to state 93
+
+
+state 81
+
+    (21) compoundstatement -> IF condition : block .
+    (22) compoundstatement -> IF condition : block . ELSE : block
+
+    NAME            reduce using rule 21 (compoundstatement -> IF condition : block .)
+    IF              reduce using rule 21 (compoundstatement -> IF condition : block .)
+    WHILE           reduce using rule 21 (compoundstatement -> IF condition : block .)
+    FOR             reduce using rule 21 (compoundstatement -> IF condition : block .)
+    RETURN          reduce using rule 21 (compoundstatement -> IF condition : block .)
+    DEDENT          reduce using rule 21 (compoundstatement -> IF condition : block .)
+    ELSE            shift and go to state 94
+
+
+state 82
+
+    (33) expression -> NAME ( arglist ) .
+
+    NEWLINE         reduce using rule 33 (expression -> NAME ( arglist ) .)
+    ,               reduce using rule 33 (expression -> NAME ( arglist ) .)
+    )               reduce using rule 33 (expression -> NAME ( arglist ) .)
+    +               reduce using rule 33 (expression -> NAME ( arglist ) .)
+    -               reduce using rule 33 (expression -> NAME ( arglist ) .)
+    BOOLOP          reduce using rule 33 (expression -> NAME ( arglist ) .)
+
+
+state 83
+
+    (37) arglist -> expression , . arglist
+    (36) arglist -> . expression
+    (37) arglist -> . expression , arglist
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    (               shift and go to state 32
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    arglist                        shift and go to state 95
+    expression                     shift and go to state 67
+
+state 84
+
+    (27) expression -> ( expression + expression . )
+
+    )               shift and go to state 96
+
+
+state 85
+
+    (28) expression -> ( expression - expression . )
+
+    )               shift and go to state 97
+
+
+state 86
+
+    (41) condition -> ( NOT condition ) .
+
+    :               reduce using rule 41 (condition -> ( NOT condition ) .)
+    AND             reduce using rule 41 (condition -> ( NOT condition ) .)
+    )               reduce using rule 41 (condition -> ( NOT condition ) .)
+    OR              reduce using rule 41 (condition -> ( NOT condition ) .)
+
+
+state 87
+
+    (40) condition -> ( expression BOOLOP expression . )
+
+    )               shift and go to state 98
+
+
+state 88
+
+    (38) condition -> ( condition AND condition . )
+
+    )               shift and go to state 99
+
+
+state 89
+
+    (39) condition -> ( condition OR condition . )
+
+    )               shift and go to state 100
+
+
+state 90
+
+    (26) block -> NEWLINE INDENT . statementlist DEDENT
+    (17) statementlist -> . statement statementlist
+    (18) statementlist -> . statement
+    (19) statement -> . simplestatement NEWLINE
+    (20) statement -> . compoundstatement
+    (25) simplestatement -> . NAME = expression
+    (21) compoundstatement -> . IF condition : block
+    (22) compoundstatement -> . IF condition : block ELSE : block
+    (23) compoundstatement -> . WHILE condition : block
+    (24) compoundstatement -> . FOR NAME IN RANGE ( expression , expression ) : block
+
+    NAME            shift and go to state 29
+    IF              shift and go to state 28
+    WHILE           shift and go to state 21
+    FOR             shift and go to state 25
+
+    compoundstatement              shift and go to state 23
+    simplestatement                shift and go to state 26
+    statementlist                  shift and go to state 101
+    statement                      shift and go to state 24
+
+state 91
+
+    (24) compoundstatement -> FOR NAME IN RANGE ( . expression , expression ) : block
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    (               shift and go to state 32
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    expression                     shift and go to state 102
+
+state 92
+
+    (10) funcbody -> NEWLINE INDENT [ initlist ] = [ . zerolist ] NEWLINE funcstatementlist DEDENT
+    (12) zerolist -> . ZERO
+    (13) zerolist -> . ZERO , zerolist
+
+    ZERO            shift and go to state 103
+
+    zerolist                       shift and go to state 104
+
+state 93
+
+    (11) funcbody -> NEWLINE INDENT [ ] = [ ] . NEWLINE funcstatementlist DEDENT
+
+    NEWLINE         shift and go to state 105
+
+
+state 94
+
+    (22) compoundstatement -> IF condition : block ELSE . : block
+
+    :               shift and go to state 106
+
+
+state 95
+
+    (37) arglist -> expression , arglist .
+
+    )               reduce using rule 37 (arglist -> expression , arglist .)
+
+
+state 96
+
+    (27) expression -> ( expression + expression ) .
+
+    NEWLINE         reduce using rule 27 (expression -> ( expression + expression ) .)
+    ,               reduce using rule 27 (expression -> ( expression + expression ) .)
+    )               reduce using rule 27 (expression -> ( expression + expression ) .)
+    +               reduce using rule 27 (expression -> ( expression + expression ) .)
+    -               reduce using rule 27 (expression -> ( expression + expression ) .)
+    BOOLOP          reduce using rule 27 (expression -> ( expression + expression ) .)
+
+
+state 97
+
+    (28) expression -> ( expression - expression ) .
+
+    NEWLINE         reduce using rule 28 (expression -> ( expression - expression ) .)
+    ,               reduce using rule 28 (expression -> ( expression - expression ) .)
+    )               reduce using rule 28 (expression -> ( expression - expression ) .)
+    +               reduce using rule 28 (expression -> ( expression - expression ) .)
+    -               reduce using rule 28 (expression -> ( expression - expression ) .)
+    BOOLOP          reduce using rule 28 (expression -> ( expression - expression ) .)
+
+
+state 98
+
+    (40) condition -> ( expression BOOLOP expression ) .
+
+    :               reduce using rule 40 (condition -> ( expression BOOLOP expression ) .)
+    AND             reduce using rule 40 (condition -> ( expression BOOLOP expression ) .)
+    )               reduce using rule 40 (condition -> ( expression BOOLOP expression ) .)
+    OR              reduce using rule 40 (condition -> ( expression BOOLOP expression ) .)
+
+
+state 99
+
+    (38) condition -> ( condition AND condition ) .
+
+    :               reduce using rule 38 (condition -> ( condition AND condition ) .)
+    AND             reduce using rule 38 (condition -> ( condition AND condition ) .)
+    )               reduce using rule 38 (condition -> ( condition AND condition ) .)
+    OR              reduce using rule 38 (condition -> ( condition AND condition ) .)
+
+
+state 100
+
+    (39) condition -> ( condition OR condition ) .
+
+    :               reduce using rule 39 (condition -> ( condition OR condition ) .)
+    AND             reduce using rule 39 (condition -> ( condition OR condition ) .)
+    )               reduce using rule 39 (condition -> ( condition OR condition ) .)
+    OR              reduce using rule 39 (condition -> ( condition OR condition ) .)
+
+
+state 101
+
+    (26) block -> NEWLINE INDENT statementlist . DEDENT
+
+    DEDENT          shift and go to state 107
+
+
+state 102
+
+    (24) compoundstatement -> FOR NAME IN RANGE ( expression . , expression ) : block
+
+    ,               shift and go to state 108
+
+
+state 103
+
+    (12) zerolist -> ZERO .
+    (13) zerolist -> ZERO . , zerolist
+
+    ]               reduce using rule 12 (zerolist -> ZERO .)
+    ,               shift and go to state 109
+
+
+state 104
+
+    (10) funcbody -> NEWLINE INDENT [ initlist ] = [ zerolist . ] NEWLINE funcstatementlist DEDENT
+
+    ]               shift and go to state 110
+
+
+state 105
+
+    (11) funcbody -> NEWLINE INDENT [ ] = [ ] NEWLINE . funcstatementlist DEDENT
+    (15) funcstatementlist -> . statementlist returnstatement
+    (16) funcstatementlist -> . returnstatement
+    (17) statementlist -> . statement statementlist
+    (18) statementlist -> . statement
+    (14) returnstatement -> . RETURN expression NEWLINE
+    (19) statement -> . simplestatement NEWLINE
+    (20) statement -> . compoundstatement
+    (25) simplestatement -> . NAME = expression
+    (21) compoundstatement -> . IF condition : block
+    (22) compoundstatement -> . IF condition : block ELSE : block
+    (23) compoundstatement -> . WHILE condition : block
+    (24) compoundstatement -> . FOR NAME IN RANGE ( expression , expression ) : block
+
+    RETURN          shift and go to state 19
+    NAME            shift and go to state 29
+    IF              shift and go to state 28
+    WHILE           shift and go to state 21
+    FOR             shift and go to state 25
+
+    funcstatementlist              shift and go to state 111
+    compoundstatement              shift and go to state 23
+    simplestatement                shift and go to state 26
+    statementlist                  shift and go to state 20
+    statement                      shift and go to state 24
+    returnstatement                shift and go to state 30
+
+state 106
+
+    (22) compoundstatement -> IF condition : block ELSE : . block
+    (26) block -> . NEWLINE INDENT statementlist DEDENT
+
+    NEWLINE         shift and go to state 75
+
+    block                          shift and go to state 112
+
+state 107
+
+    (26) block -> NEWLINE INDENT statementlist DEDENT .
+
+    NAME            reduce using rule 26 (block -> NEWLINE INDENT statementlist DEDENT .)
+    IF              reduce using rule 26 (block -> NEWLINE INDENT statementlist DEDENT .)
+    WHILE           reduce using rule 26 (block -> NEWLINE INDENT statementlist DEDENT .)
+    FOR             reduce using rule 26 (block -> NEWLINE INDENT statementlist DEDENT .)
+    RETURN          reduce using rule 26 (block -> NEWLINE INDENT statementlist DEDENT .)
+    ELSE            reduce using rule 26 (block -> NEWLINE INDENT statementlist DEDENT .)
+    DEDENT          reduce using rule 26 (block -> NEWLINE INDENT statementlist DEDENT .)
+
+
+state 108
+
+    (24) compoundstatement -> FOR NAME IN RANGE ( expression , . expression ) : block
+    (27) expression -> . ( expression + expression )
+    (28) expression -> . ( expression - expression )
+    (29) expression -> . NUMBER
+    (30) expression -> . ZERO
+    (31) expression -> . - ZERO
+    (32) expression -> . - NUMBER
+    (33) expression -> . NAME ( arglist )
+    (34) expression -> . NAME ( )
+    (35) expression -> . NAME
+
+    (               shift and go to state 32
+    NUMBER          shift and go to state 34
+    ZERO            shift and go to state 35
+    -               shift and go to state 33
+    NAME            shift and go to state 31
+
+    expression                     shift and go to state 113
+
+state 109
+
+    (13) zerolist -> ZERO , . zerolist
+    (12) zerolist -> . ZERO
+    (13) zerolist -> . ZERO , zerolist
+
+    ZERO            shift and go to state 103
+
+    zerolist                       shift and go to state 114
+
+state 110
+
+    (10) funcbody -> NEWLINE INDENT [ initlist ] = [ zerolist ] . NEWLINE funcstatementlist DEDENT
+
+    NEWLINE         shift and go to state 115
+
+
+state 111
+
+    (11) funcbody -> NEWLINE INDENT [ ] = [ ] NEWLINE funcstatementlist . DEDENT
+
+    DEDENT          shift and go to state 116
+
+
+state 112
+
+    (22) compoundstatement -> IF condition : block ELSE : block .
+
+    NAME            reduce using rule 22 (compoundstatement -> IF condition : block ELSE : block .)
+    IF              reduce using rule 22 (compoundstatement -> IF condition : block ELSE : block .)
+    WHILE           reduce using rule 22 (compoundstatement -> IF condition : block ELSE : block .)
+    FOR             reduce using rule 22 (compoundstatement -> IF condition : block ELSE : block .)
+    RETURN          reduce using rule 22 (compoundstatement -> IF condition : block ELSE : block .)
+    DEDENT          reduce using rule 22 (compoundstatement -> IF condition : block ELSE : block .)
+
+
+state 113
+
+    (24) compoundstatement -> FOR NAME IN RANGE ( expression , expression . ) : block
+
+    )               shift and go to state 117
+
+
+state 114
+
+    (13) zerolist -> ZERO , zerolist .
+
+    ]               reduce using rule 13 (zerolist -> ZERO , zerolist .)
+
+
+state 115
+
+    (10) funcbody -> NEWLINE INDENT [ initlist ] = [ zerolist ] NEWLINE . funcstatementlist DEDENT
+    (15) funcstatementlist -> . statementlist returnstatement
+    (16) funcstatementlist -> . returnstatement
+    (17) statementlist -> . statement statementlist
+    (18) statementlist -> . statement
+    (14) returnstatement -> . RETURN expression NEWLINE
+    (19) statement -> . simplestatement NEWLINE
+    (20) statement -> . compoundstatement
+    (25) simplestatement -> . NAME = expression
+    (21) compoundstatement -> . IF condition : block
+    (22) compoundstatement -> . IF condition : block ELSE : block
+    (23) compoundstatement -> . WHILE condition : block
+    (24) compoundstatement -> . FOR NAME IN RANGE ( expression , expression ) : block
+
+    RETURN          shift and go to state 19
+    NAME            shift and go to state 29
+    IF              shift and go to state 28
+    WHILE           shift and go to state 21
+    FOR             shift and go to state 25
+
+    compoundstatement              shift and go to state 23
+    statementlist                  shift and go to state 20
+    simplestatement                shift and go to state 26
+    statement                      shift and go to state 24
+    returnstatement                shift and go to state 30
+    funcstatementlist              shift and go to state 118
+
+state 116
+
+    (11) funcbody -> NEWLINE INDENT [ ] = [ ] NEWLINE funcstatementlist DEDENT .
+
+    $end            reduce using rule 11 (funcbody -> NEWLINE INDENT [ ] = [ ] NEWLINE funcstatementlist DEDENT .)
+    DEF             reduce using rule 11 (funcbody -> NEWLINE INDENT [ ] = [ ] NEWLINE funcstatementlist DEDENT .)
+
+
+state 117
+
+    (24) compoundstatement -> FOR NAME IN RANGE ( expression , expression ) . : block
+
+    :               shift and go to state 119
+
+
+state 118
+
+    (10) funcbody -> NEWLINE INDENT [ initlist ] = [ zerolist ] NEWLINE funcstatementlist . DEDENT
+
+    DEDENT          shift and go to state 120
+
+
+state 119
+
+    (24) compoundstatement -> FOR NAME IN RANGE ( expression , expression ) : . block
+    (26) block -> . NEWLINE INDENT statementlist DEDENT
+
+    NEWLINE         shift and go to state 75
+
+    block                          shift and go to state 121
+
+state 120
+
+    (10) funcbody -> NEWLINE INDENT [ initlist ] = [ zerolist ] NEWLINE funcstatementlist DEDENT .
+
+    $end            reduce using rule 10 (funcbody -> NEWLINE INDENT [ initlist ] = [ zerolist ] NEWLINE funcstatementlist DEDENT .)
+    DEF             reduce using rule 10 (funcbody -> NEWLINE INDENT [ initlist ] = [ zerolist ] NEWLINE funcstatementlist DEDENT .)
+
+
+state 121
+
+    (24) compoundstatement -> FOR NAME IN RANGE ( expression , expression ) : block .
+
+    NAME            reduce using rule 24 (compoundstatement -> FOR NAME IN RANGE ( expression , expression ) : block .)
+    IF              reduce using rule 24 (compoundstatement -> FOR NAME IN RANGE ( expression , expression ) : block .)
+    WHILE           reduce using rule 24 (compoundstatement -> FOR NAME IN RANGE ( expression , expression ) : block .)
+    FOR             reduce using rule 24 (compoundstatement -> FOR NAME IN RANGE ( expression , expression ) : block .)
+    RETURN          reduce using rule 24 (compoundstatement -> FOR NAME IN RANGE ( expression , expression ) : block .)
+    DEDENT          reduce using rule 24 (compoundstatement -> FOR NAME IN RANGE ( expression , expression ) : block .)
+
