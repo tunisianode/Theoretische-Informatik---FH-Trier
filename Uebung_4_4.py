@@ -23,7 +23,8 @@ def faku2(x):
     if (x<1):
         result = 1
     else:
-        result = prodZ(faku2(x-1), x)
+        y = (x-1)
+        result = prodZ(faku2(y), x)
         
     return result
     
