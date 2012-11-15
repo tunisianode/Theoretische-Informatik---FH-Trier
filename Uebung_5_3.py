@@ -1,4 +1,6 @@
 # test fuer in Frage kommende n ob x=2^n
+# Hier muss natuerlich auch noch prodZ benutzt werden.
+
 def cM(x):
     result = 0
     
